@@ -1,0 +1,90 @@
+﻿@inject IImageService _ImageService
+@inject IBlogService _BlogService
+
+
+
+<div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
+    <div class="sidebar-inner">
+
+        <!-- Start Single Widget  -->
+        @foreach(Category categories in await _BlogService.GetCategoriesAsync())
+        {
+        <div class="axil-single-widget widget widget_categories mb--30">
+            <ul>
+                <li class="cat-item">
+                    <a asp-action="Details" asp-controller="Categories" class="inner">
+                        <div class="thumbnail">
+                                <img src="@_ImageService.ConvertByteArrayToFile(categories.ImageData,categories.ImageType, DefaultImage.CategoryImage)" alt="Post Images">
+                        </div>
+                        <div class="content">
+                            <h5 class="title">@categories.Name</h5>
+                        </div>
+                    </a>
+                </li>               
+            </ul>
+        </div>
+        }
+        <!-- End Single Widget  -->
+        <!-- Start Single Widget  -->
+        <div class="axil-single-widget widget widget_search mb--30">
+            <h5 class="widget-title">Search</h5>
+            <form asp-action="SearchIndex" asp-controller="BlogPosts" class="header-search-form d-sm-block d-none">
+                <div class="axil-search form-group">
+                    <button type="submit" class="search-button"><i class="fal fa-search"></i></button>
+                    <input type="text" class="form-control" placeholder="Search" name="searchString">
+                </div>
+            </form>
+        </div>
+        <!-- End Single Widget  -->
+        <!-- Start Single Widget  -->
+        <div class="axil-single-widget widget widget_postlist mb--30">
+            <h5 class="widget-title">Popular Blogs</h5>
+            <!-- Start Post List  -->
+            <div class="post-medium-block">
+
+                <!-- Start Single Post  -->
+                @foreach(BlogPost blogPost in await _BlogService.GetPopularBlogPostsAsync(3))
+                {
+                <div class="content-block post-medium mb--20">
+                    <div class="post-thumbnail">
+                        <a href="post-details.html">
+                            <a asp-action="Details" asp-controller="BlogPosts" asp-route-slug="@blogPost.Slug">
+                            <img src="@_ImageService.ConvertByteArrayToFile(blogPost.ImageData,blogPost.ImageType, DefaultImage.BlogPostImage)" alt="Post Images">
+                            </a>
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <h6 class="title">
+                            <a asp-action="Details" asp-controller="BlogPosts" asp-route-slug="@blogPost.Slug">
+                                @blogPost.Title
+                            </a>
+                        </h6>
+                        <div class="post-meta">
+                            <ul class="post-meta-list">
+                                <li>@blogPost.Created.ToString("MMM dd, yyyy")</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                }
+                <!-- End Single Post  -->
+
+
+            </div>
+            <!-- End Post List  -->
+
+        </div>
+        <!-- End Single Widget  -->
+        <!-- Start Single Widget  -->
+        <div class="axil-single-widget widget widget_social mb--30">
+            <h5 class="widget-title">Stay In Touch</h5>
+            <!-- Start Post List  -->
+            <ul class="social-icon md-size justify-content-center">
+          
+                <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+            </ul>
+            <!-- End Post List  -->
+        </div>
+        <!-- End Single Widget  -->
+    </div>
+</div>
