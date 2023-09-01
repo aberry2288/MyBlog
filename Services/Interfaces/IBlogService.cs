@@ -30,6 +30,8 @@ namespace MyBlog.Services.Interfaces
 
         public Task<bool> ValidSlugAsync(string? title, int? blogPostId);
 
-        //public Task<IEnumerable<BlogPost>> GetBlogPostsByCategory(int? categoryId);
+        public Task<IEnumerable<BlogPost>> GetBlogPostsByCategory(int? categoryId);
+
+        public Task<IEnumerable<BlogPost>> GetAllBlogPostsAsync();
     }
 }

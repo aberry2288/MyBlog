@@ -107,6 +107,25 @@ namespace MyBlog.Services
         }
         #endregion
 
+        #region GetAllBlogPosts
+        public async Task<IEnumerable<BlogPost>> GetAllBlogPostsAsync()
+        {
+            try
+            {
+                IEnumerable<BlogPost> blogPosts = await _context.BlogPosts.Include(b => b.Category).Include(b => b.Comments)
+                                                                         .ThenInclude(c => c.Author).Include(b => b.Tags).ToListAsync();
+
+                return blogPosts;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        } 
+        #endregion
+
         #region Update BlogPost
         public async Task UpdateBlogPostAsync(BlogPost? blogPost)
         {
@@ -203,7 +222,7 @@ namespace MyBlog.Services
 
                 foreach (string tagName in tags)
                 {
-                    if(string.IsNullOrEmpty(tagName.Trim())) continue;
+                    if (string.IsNullOrEmpty(tagName.Trim())) continue;
 
                     Tag? tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name!.Trim().ToLower() == tagName.Trim().ToLower());
 
@@ -351,16 +370,25 @@ namespace MyBlog.Services
             }
         }
         #endregion
+        public async Task<IEnumerable<BlogPost>> GetBlogPostsByCategory(int? categoryId)
+        {
+
+            try
+            {
+                IEnumerable<BlogPost> blogPosts = await _context.BlogPosts.Where(b => b.IsPublished == true && b.IsDeleted == false && categoryId == b.CategoryId)
+                                                                         .Include(b => b.Category).Include(b => b.Comments)
+                                                                         .ThenInclude(c => c.Author).Include(b => b.Tags).ToListAsync();
+
+                return blogPosts;
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
 
-//        public async Task<IEnumerable<BlogPost>> GetBlogPostsByCategory(int? categoryId);
-//       {
-
-//             IEnumerable<BlogPost> blogPosts = await _context.BlogPosts.Include(b => b.Category.Id)
-
-
-//        }
-//}
-//}
 

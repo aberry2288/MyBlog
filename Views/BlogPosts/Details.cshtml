@@ -55,7 +55,7 @@
                                                     </h6>
                                                     <ul class="post-meta-list">
                                                         <li>@Model.Created.ToString("MMM dd, yyyy")</li>
-                                                        <li>[*Number of Comments*]</li>
+                                                        <li>@Model.Comments.Count</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -79,7 +79,7 @@
                         @Model.Abstract
                     </p>
                     <figure class="wp-block-image alignwide text-center">
-                        <img src="" alt="Show the blog's Image here or a default Image" />
+                        <img src="@_ImageService.ConvertByteArrayToFile(null, null, DefaultImage.BlogPostImage)" alt="Author Images" >
                     </figure>
 
                     @Html.Raw(Model.Content)
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                     </div>
-                    }
+                    
                     <!-- End Author  -->
                     <!-- Start Comment Form Area  -->
                     <div class="axil-comment-area">
