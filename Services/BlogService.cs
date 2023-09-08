@@ -151,7 +151,7 @@ namespace MyBlog.Services
         {
             try
             {
-                IEnumerable<Category> categories = await _context.Categories.ToListAsync();
+                IEnumerable<Category> categories = await _context.Categories.Include(c => c.BlogPosts).ToListAsync();
 
                 return categories;
             }
@@ -164,7 +164,7 @@ namespace MyBlog.Services
         #endregion
 
         #region Get Popular Blog Posts
-        public async Task<IEnumerable<BlogPost>> GetPopularBlogPostsAsync(int? count)
+        public async Task<IEnumerable<BlogPost>> GetPopularBlogPostsAsync(int? count =null)
         {
             try
             {
@@ -370,6 +370,8 @@ namespace MyBlog.Services
             }
         }
         #endregion
+
+        #region Get Blog Posts By Category
         public async Task<IEnumerable<BlogPost>> GetBlogPostsByCategory(int? categoryId)
         {
 
@@ -387,7 +389,8 @@ namespace MyBlog.Services
 
                 throw;
             }
-        }
+        } 
+        #endregion
     }
 }
 

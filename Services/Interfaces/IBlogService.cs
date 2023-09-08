@@ -16,7 +16,7 @@ namespace MyBlog.Services.Interfaces
 
         public Task<IEnumerable<Category>> GetCategoriesAsync();
 
-        public Task<IEnumerable<BlogPost>> GetPopularBlogPostsAsync(int? count);
+        public Task<IEnumerable<BlogPost>> GetPopularBlogPostsAsync(int? count = null);
 
         public Task<IEnumerable<Tag>> GetTagsAsync();
 

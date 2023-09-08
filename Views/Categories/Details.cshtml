@@ -1,42 +1,48 @@
-﻿@model MyBlog.Models.Category
+﻿@using X.PagedList.Web.Common;
+@model IPagedList<MyBlog.Models.BlogPost>
+@inject IImageService _ImageService
 
-@{
-    ViewData["Title"] = "Details";
-}
 
-<h1>Details</h1>
+<!-- Start Author Area  -->
+<partial name="_AuthorAreaPartial" />
+<!-- End Author Area  -->
+<!-- Start Post List Wrapper  -->
+<div class="axil-post-list-area axil-section-gap bg-color-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-title">
+                    <h2 class="title mb--40">Category: @ViewBag.CategoryName</h2>
+                </div>
+            </div>
+            <!-- Start Post List  -->
+            <div class="col-lg-8 col-xl-8">
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageData)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageData)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageType)
-        </dd>
-    </dl>
+                @foreach (BlogPost blogPost in Model)
+                {
+                    <partial name="_BlogCardPartial" model="blogPost" />
+                }
+
+                <div>
+                    <div>
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    </div>
+
+                    @Html.PagedListPager(Model, pageNum => Url.Action("Details", new {pageNum, id = ViewBag.CategoryId}),
+                    new PagedListRenderOptions {LiElementClasses = new string[] {"my-page-item"}, PageClasses = new string[] {"my-page-link"} })
+
+                </div>
+
+            </div>
+            <!-- End Post List  -->
+            <!-- Start Sidebar Area  -->
+            <partial name="_SideBarPartial" />
+            <!-- End Sidebar Area  -->
+
+
+
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>
+<!-- End Post List Wrapper  -->

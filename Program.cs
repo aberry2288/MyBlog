@@ -5,6 +5,7 @@ using MyBlog.Models;
 using MyBlog.Services.Interfaces;
 using MyBlog.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,11 +27,44 @@ builder.Services.AddScoped<IImageService, ImageService>();
 
 builder.Services.AddScoped<IBlogService, BlogService>();
 
-builder.Services.AddMvc();
-
 builder.Services.AddScoped<IEmailSender, EmailService>();
 
+//Bind the email settings to the EmailSettings object
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
+builder.Services.AddMvc();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Adam's Blog",
+        Version = "v1",
+        Description = "A public facing API to fetch the latest blog posts",
+        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+        {
+            Name = "Adam Berry",
+            Email = "aberry2288@gmail.com",
+            Url = new Uri("https://adamberrysportfolio.netlify.app")
+        }
+
+    });
+
+    string xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"; 
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
+
+});
+
+builder.Services.AddCors(cors =>
+{
+    cors.AddPolicy("DefaultPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+
+
+
 var app = builder.Build();
+
+app.UseCors("DefaultPolicy");
 
 var scope = app.Services.CreateScope();
 
@@ -47,6 +81,17 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseSwagger();
+
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PublicAPI v1");
+    c.InjectStylesheet("/css/swagger.css");
+    c.InjectJavascript("/js/swagger.js");
+    c.DocumentTitle = "My Blog Documentation";
+});
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

@@ -75,12 +75,26 @@ namespace MyBlog.Controllers
             return View(nameof(Index), blogPosts);
         }
 
-        public async Task<IActionResult> BlogPostByCategory(int? categoryId)
+        public async Task<IActionResult> Popular(int? pageNum)
         {
-            IEnumerable<BlogPost> blogPosts = await _blogService.GetBlogPostsByCategory(categoryId);
+
+            int pageSize = 3;
+            int page = pageNum ?? 1;
+
+            ViewData["ActionName"] = nameof(Popular);
+
+            IPagedList<BlogPost> blogPosts = await (await _blogService.GetPopularBlogPostsAsync()).ToPagedListAsync(page, pageSize);
 
             return View(nameof(Index), blogPosts);
+
         }
+
+        //public async Task<IActionResult> BlogPostByCategory(int? categoryId)
+        //{
+        //    IEnumerable<BlogPost> blogPosts = await _blogService.GetBlogPostsByCategory(categoryId);
+
+        //    return View(nameof(Index), blogPosts);
+        //}
 
         [AllowAnonymous]
         // GET: BlogPosts/Details/5

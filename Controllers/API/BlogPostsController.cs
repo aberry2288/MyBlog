@@ -22,11 +22,25 @@ namespace MyBlog.Controllers.API
             _blogService = blogService;
         }
 
-        // GET: api/BlogPosts
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts()
+        /// <summary>
+        /// This endpoint will return the most recently published blog posts. 
+        /// The count parameter indicates the number of recent posts to return. 
+        /// The maximum number of blog posts allowed per request is 10.
+        /// </summary>
+        /// <param name="count">The number of blog posts to retrieve</param>
+        /// <returns></returns>
+        [HttpGet("{count:int}")]
+        public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts(int count)
         {
-            IEnumerable<BlogPost> blogPosts = (await _blogService.GetBlogPostsAsync()).Take(4);
+
+            if (count > 10) 
+            {
+               count = 10;
+            }
+
+            IEnumerable<BlogPost> blogPosts = (await _blogService.GetBlogPostsAsync()).Take(count);
+
+
 
             return Ok(blogPosts);
 

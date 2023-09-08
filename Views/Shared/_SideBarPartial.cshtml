@@ -1,23 +1,30 @@
 ﻿@inject IImageService _ImageService
 @inject IBlogService _BlogService
 
+@{
+    IEnumerable<Category> popularCategories = await _BlogService.GetCategoriesAsync();
+
+    popularCategories = popularCategories.OrderByDescending(c => c.BlogPosts.Count).Take(4);
+
+}
+
 
 
 <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
     <div class="sidebar-inner">
 
         <!-- Start Single Widget  -->
-        @foreach(Category categories in await _BlogService.GetCategoriesAsync())
+        @foreach(Category category in popularCategories)
         {
         <div class="axil-single-widget widget widget_categories mb--30">
             <ul>
                 <li class="cat-item">
-                    <a asp-action="Details" asp-controller="Categories" class="inner">
+                    <a asp-action="Details" asp-controller="Categories" asp-route-id="@category.Id" class="inner">
                         <div class="thumbnail">
-                                <img src="@_ImageService.ConvertByteArrayToFile(categories.ImageData,categories.ImageType, DefaultImage.CategoryImage)" alt="Post Images">
+                                <img src="@_ImageService.ConvertByteArrayToFile(category.ImageData,category.ImageType, DefaultImage.CategoryImage)" alt="Post Images">
                         </div>
                         <div class="content">
-                            <h5 class="title">@categories.Name</h5>
+                            <h5 class="title">@category.Name</h5>
                         </div>
                     </a>
                 </li>               

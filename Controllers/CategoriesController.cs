@@ -9,6 +9,7 @@ using MyBlog.Data;
 using MyBlog.Models;
 using MyBlog.Services;
 using MyBlog.Services.Interfaces;
+using X.PagedList;
 
 namespace MyBlog.Controllers
 {
@@ -34,21 +35,32 @@ namespace MyBlog.Controllers
         }
 
         // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? pageNum)
         {
             if (id == null || _context.Categories == null)
             {
                 return NotFound();
             }
 
-            IEnumerable<Category?> category = await _blogService.GetCategoriesAsync();
+            Category? category = await _context.Categories.Include(c => c.BlogPosts).FirstOrDefaultAsync(m => m.Id == id);
 
             if (category == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            int pageSize = 3;
+            int page = pageNum ?? 1;
+
+
+            IPagedList<BlogPost> blogPosts = await category.BlogPosts.ToPagedListAsync(page, pageSize);
+
+            ViewData["CategoryName"] = category.Name;
+            ViewData["CategoryId"] = category.Id;
+
+            return View(blogPosts);
+
+            
         }
 
         // GET: Categories/Create
