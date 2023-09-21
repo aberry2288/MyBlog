@@ -79,7 +79,7 @@
                         @Model.Abstract
                     </p>
                     <figure class="wp-block-image alignwide text-center">
-                        <img src="@_ImageService.ConvertByteArrayToFile(null, null, DefaultImage.BlogPostImage)" alt="Author Images" >
+                        <img src="@_ImageService.ConvertByteArrayToFile(Model?.ImageData,Model?.ImageType, DefaultImage.BlogPostImage)" alt="Author Images">
                     </figure>
 
                     @Html.Raw(Model.Content)
