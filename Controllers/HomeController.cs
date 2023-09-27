@@ -84,7 +84,7 @@ namespace MyBlog.Controllers
                 swalMessage = "Error: Unable to Send Email.";
             }
 
-            return RedirectToAction("Index", new { swalMessage });
+            return RedirectToAction("Index", "BlogPosts", new { swalMessage });
         }
     }
 }
