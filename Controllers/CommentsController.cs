@@ -69,6 +69,7 @@ namespace MyBlog.Controllers
 
             if (ModelState.IsValid)
             {
+                
                 comment.AuthorId= _userManager.GetUserId(User);
                 comment.Created= DateTime.Now;
 

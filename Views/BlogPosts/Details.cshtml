@@ -1,9 +1,12 @@
-﻿@inject IImageService _ImageService
+﻿@using Microsoft.AspNetCore.Identity;
+@inject IImageService _ImageService
 @model BlogPost
+@inject UserManager<BlogUser> _userManager;
 
 
 @{
     ViewData["Title"] = "Details";
+    BlogUser? blogUser = await _userManager.GetUserAsync(User);
 }
 
 
@@ -90,7 +93,7 @@
                         <a href="#">@tag.Name</a>                            
                         }
                     </div>
-                    <div class="social-share-block">
+                   @* <div class="social-share-block">
                         <div class="post-like">
                             <a id="likesButton">
                                 <i id="faThumb" class="fal fa-thumbs-up" style="background-color:#ff993b;color:white;border-color:white"></i>
@@ -100,7 +103,7 @@
                         <ul class="social-icon icon-rounded-transparent md-size">                         
                             <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
                         </ul>
-                    </div>
+                    </div>*@
                     <!-- Start Author  -->
                     <div class="about-author">
                         <div class="media">
@@ -122,7 +125,7 @@
                                 </div>
                                 <div class="content">
                                     <p class="b1 description">
-                                        I'm a coder, you're a coder, he's a coder, she's a coder ... wouldn't you like to be a coder too!?
+                                        My name is Adam Berry and I am a software developer located in Winston-Salem, North Carolina. I have been learning and practicing building websites and applications including this blog! This blog is a place for me to write about coding topics I am interested in and share them with others. I primarily use JavaScript, C# and .NET to build my webpages and applications. Send me an email or check out my LinkedIn profile if you'd like to get in touch!
                                     </p>
                                     <ul class="social-share-transparent size-md">                                      
                                         <li><a href="#"><i class="far fa-envelope"></i></a></li>
@@ -186,7 +189,7 @@
                                         <div class="comment-body">
                                             <div class="single-comment">
                                                 <div class="comment-img">
-                                                    <img src="" alt="Author Images" style="height:40px;width:40px">
+                                                    <img src="@_ImageService.ConvertByteArrayToFile(blogUser.ImageData, blogUser.ImageType, DefaultImage.BlogUserImage)" alt="Author Images" style="height:40px;width:40px">
                                                 </div>
                                                 <div class="comment-inner">
                                                     <h6 class="commenter">
