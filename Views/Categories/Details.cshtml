@@ -1,7 +1,12 @@
 ﻿@using X.PagedList.Web.Common;
 @model IPagedList<MyBlog.Models.BlogPost>
 @inject IImageService _ImageService
+@inject IBlogService _BlogService
 
+@{
+    
+    //BlogPost blogpost = await _BlogService.GetBlogPostsByCategory()
+}
 
 <!-- Start Author Area  -->
 <partial name="_AuthorAreaPartial" />
@@ -18,7 +23,7 @@
             <!-- Start Post List  -->
             <div class="col-lg-8 col-xl-8">
 
-                @foreach (BlogPost blogPost in Model)
+                @foreach (BlogPost blogPost in Model.Where(b => b.IsPublished == true && b.IsDeleted == false))
                 {
                     <partial name="_BlogCardPartial" model="blogPost" />
                 }
