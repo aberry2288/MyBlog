@@ -167,7 +167,15 @@
                                     <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class="user-img">
                                             <img src="" alt="">
-                                            <span class="status online"></span>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                <span> </span>
+                                            }
+                                            else
+                                            {
+                                            <span class="status online">Login</span>
+                                                
+                                            }
                                         </span>
                                         <span>@blogUser?.FullName</span>
                                     </a>
